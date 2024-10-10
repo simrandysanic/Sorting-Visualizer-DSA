@@ -72,7 +72,7 @@ function showBars(move) {
         if (move && move.indices.includes(i)) {
             bar.style.backgroundColor = (move.type === "swap") ? "pink" : "purple";
         } else {
-            bar.style.backgroundColor = "black"; // Default color
+            bar.style.backgroundColor = "blue"; // Default color
         }
 
         container.appendChild(bar);
