@@ -1,0 +1,112 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #F3EAF4, #E8F1F5);
+    margin: 0;
+    padding: 0;
+    color: #3A3A3A;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+}
+
+h1 {
+    padding: 30px;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    margin: 0;
+    color: #3A3A3A;
+}
+
+#container {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 350px;
+    margin-top: 20px;
+    overflow-x: hidden;
+    max-width: 100%; /* Ensure it doesn't exceed screen width */
+    padding: 0 20px;
+}
+
+.bar {
+    width: 2px;
+    margin: 0 1px;
+    background-color: #5d5d77;
+    transition: height 0.2s, background-color 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;;
+}
+
+button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #405D72;
+    color: #f3f2f2;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #F7E7DC;
+    color: #3A3A3A;
+}
+
+button:disabled {
+    background-color: #D3D3D3; /* Light gray to give it a disabled look */
+    color: #A9A9A9; /* Slightly lighter text color */
+    cursor: not-allowed; /* Shows a 'no' symbol when hovering over disabled button */
+    opacity: 0.6; /* Makes the button appear ghostly */
+}
+
+button:disabled:hover {
+    background-color: #D3D3D3; /* Maintain the same disabled background */
+    color: #A9A9A9; /* Maintain the same disabled text color */
+    cursor: not-allowed; /* Prevent hover changes */
+}
+
+#elementsRange {
+    width: 300px;
+}
+
+#swapCounter {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.block {
+    background-color: transparent;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 0 10px;
+}
+
+#description {
+    width: 40%;
+    max-width: 400px;
+}
+
+#complexityTable {
+    width: 50%;
+    max-width: 400px;
+    border-collapse: collapse;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden; /* Rounded corners */
+}
+
+#complexityTable th, #complexityTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+#complexityTable th {
+    background-color: #F3EAF4;
+    color: #3A3A3A;
+    color: transparent;
+}

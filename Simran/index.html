@@ -5,26 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sorting Algorithms Visualizer</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
+    <header class="sticky-header">
         <h1>Sorting Algorithms Visualizer</h1>
         <div class="menu-icon" onclick="toggleMenu()">&#9776;</div>
-        <nav id="navbar">
+        <nav id="navbar" class="hidden">
             <ul>
-                <li><a href="bubble.html">Bubble Sort</a></li>
-                <li><a href="merge.html">Merge Sort</a></li>
-                <li><a href="heap.html">Heap Sort</a></li>
-                <li><a href="quick.html">Quick Sort</a></li>
-                <li><a href="median.html">Optimized Quick Sort</a></li>
+                <li><a href="bubble.html"><i class="icon-sort"></i> Bubble Sort</a></li>
+                <li><a href="merge.html"><i class="icon-sort"></i> Merge Sort</a></li>
+                <li><a href="heap.html"><i class="icon-sort"></i> Heap Sort</a></li>
+                <li><a href="quick.html"><i class="icon-sort"></i> Quick Sort</a></li>
+                <li><a href="median.html"><i class="icon-sort"></i> Optimized Quick Sort</a></li>
             </ul>
         </nav>
     </header>
+
     <main>
-        <p>Select a sorting algorithm from the menu to see its visualization.</p>
+        <div class="content-center">
+            <p>Select a sorting algorithm from the menu to see its visualization.</p>
+        </div>
     </main>
+
     <footer>
-        
+        <p>&copy; 2024 Sorting Algorithms Visualizer</p>
     </footer>
 
     <script src="scripts.js"></script>

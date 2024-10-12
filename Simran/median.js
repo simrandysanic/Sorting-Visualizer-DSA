@@ -18,7 +18,8 @@ function playNote(freq) {
 }
 
 // GLOBAL VARIABLES
-let n = 100; // Default number of bars/numbers
+let s = 600;
+let n = 25; // Default number of bars/numbers
 let array = []; // Array to hold the numbers generated
 let isAnimating = false; // Flag to prevent concurrent animations
 let swapCount = 0; // Counter to track the number of swaps
@@ -150,38 +151,62 @@ function animate(swaps) {
 
             animationId = setTimeout(() => {
                 animate(swaps);
-            }, animationSpeed); // Use animationSpeed variable for consistency
+            },s); // Use animationSpeed variable for consistency
         }
     }
 }
 
-function showBars(activeIndex1 = -1, activeIndex2 = -1, isSorted = false) {
-   const container = document.getElementById("container");
-   container.innerHTML = ""; 
-   const barWidth = Math.max(2, Math.floor(container.clientWidth / n)); 
+function showBars(activeIndex1 = -1, activeIndex2 = -1) {
+    const container = document.getElementById("container");
+    container.innerHTML = ""; // Clear previous bars
+    const barWidth = Math.max(2, Math.floor(container.clientWidth / n)); // Calculate bar width based on container width and number of elements
 
-   for (let i = 0; i < array.length; i++) {
-       const bar = document.createElement("div");
-       bar.style.height = array[i] * 100 + "%";
-       bar.style.width = barWidth + "px"; 
-       bar.classList.add("bar");
-       bar.style.marginRight = "0px"; 
+    // Calculate maximum height for the bars
+    const maxValue = Math.max(...array);
 
-       if (activeIndex1 !== -1 && (i === activeIndex1 || i === activeIndex2)) {
-           bar.style.backgroundColor = "red"; 
-       } 
-       else {
-           bar.style.backgroundColor = "blue"; 
-       }
+    // Set a percentage height to leave space at the top
+    const barMaxHeight = 90; // Use 90% of the container height for bars
 
-       container.appendChild(bar);
-   }
+    for (let i = 0; i < array.length; i++) {
+        const bar = document.createElement("div");
+
+        bar.style.position = "absolute"; // Position bars absolutely
+        bar.style.bottom = "0"; // Start from the bottom of the container
+        bar.style.height = `${(array[i] / maxValue) * barMaxHeight}%`; // Set height relative to maxValue and barMaxHeight
+        bar.style.width = barWidth + "px"; // Set width of the bar
+        bar.classList.add("bar");
+        //bar.style.marginRight = "0px";
+
+        // Color bars differently based on their status
+        if (activeIndex1 !== -1 && (i === activeIndex1 || i === activeIndex2)) {
+            bar.style.backgroundColor = "#FFEEAD"; // Swapped bars
+        } else {
+            bar.style.backgroundColor = "#5d5d77"; // Unsorted bars
+        }
+
+        // Set the left position based on index
+        bar.style.left = `${i * (barWidth + 1)}px`; // Adding 1px for spacing
+
+        // Create a span for the number above the bar
+        const numberSpan = document.createElement("span");
+        numberSpan.innerText = Math.floor(array[i] * 100); // Show the number corresponding to the bar height
+        numberSpan.style.fontSize = "12px"; // Adjust the font size for readability
+        numberSpan.style.position = "absolute"; // Position the number absolutely
+        numberSpan.style.left = `${i * (barWidth + 1)+ barWidth / 2 - 8}px`; // Match the bar's left position
+
+        // Position the number slightly above the bar, with a little space
+        numberSpan.style.bottom = `${(array[i] / maxValue) * barMaxHeight + 2}%`; // Add 2% to position the number above the bar
+
+        // Append the number span to the container
+        container.appendChild(numberSpan);
+        container.appendChild(bar); // This appends the bar to the container    
+    }
 }
 
 function colorSortedBars() {
    const bars = document.getElementsByClassName("bar");
    for (let i = 0; i < bars.length; i++) {
-       bars[i].style.backgroundColor = "green"; 
+       bars[i].style.backgroundColor = "#96CEB4"; 
    }
 }
 
@@ -200,22 +225,23 @@ function updateElementCountDisplay() {
    elementCountDisplay.innerText = `Number of Elements: ${n}`;
 }
 
+// Enable and disable buttons during animation
 function disableButtons() {
-   document.getElementById("randomArray").disabled = true;
-   document.getElementById("worstCaseArray").disabled = true;
-   document.getElementById("bestCaseArray").disabled = true;
-   document.getElementById("playButton").disabled = true;
-   document.getElementById("stopButton").style.display = "inline"; 
-   document.getElementById("elementsRange").disabled = true; 
+    document.getElementById("randomArray").disabled = true;
+    document.getElementById("worstCaseArray").disabled = true;
+    document.getElementById("bestCaseArray").disabled = true;
+    document.getElementById("playButton").disabled = true;
+    document.getElementById("stopButton").style.display = "inline"; 
+    document.getElementById("elementsRange").disabled = true;
 }
 
 function enableButtons() {
-   document.getElementById("randomArray").disabled = false;
-   document.getElementById("worstCaseArray").disabled = false;
-   document.getElementById("bestCaseArray").disabled = false;
-   document.getElementById("playButton").disabled = false;
-   document.getElementById("stopButton").style.display = "none"; 
-   document.getElementById("elementsRange").disabled = false; 
+    document.getElementById("randomArray").disabled = false;
+    document.getElementById("worstCaseArray").disabled = false;
+    document.getElementById("bestCaseArray").disabled = false;
+    document.getElementById("playButton").disabled = false;
+    document.getElementById("stopButton").style.display = "none"; 
+    document.getElementById("elementsRange").disabled = false;
 }
 
 // HTML Buttons trigger the respective initialization functions
@@ -225,9 +251,14 @@ document.getElementById("bestCaseArray").addEventListener("click", initBest);
 document.getElementById("playButton").addEventListener("click", playQuickSort);
 document.getElementById("stopButton").addEventListener("click", stopAnimation);
 
-// Add event listeners for the number of elements selector 
+// Add event listeners for the number of elements selector
 document.getElementById("elementsRange").addEventListener("input", (e) => {
-   n = Math.min(parseInt(e.target.value), 500); 
-   updateElementCountDisplay();
-   initRandom(); 
+    n = Math.min(parseInt(e.target.value), 60); 
+    updateElementCountDisplay();
+    initRandom(); 
+});
+// Add event listener for the speed selector
+document.getElementById("speedRange").addEventListener("input", (e) => {
+    s = 1000 - parseInt(e.target.value); // Invert speed range, as lower values should be faster
+    updateSpeedDisplay();
 });

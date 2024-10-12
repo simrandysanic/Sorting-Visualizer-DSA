@@ -4,53 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heap Sort Visualization</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        #container {
-            display: flex;
-            justify-content: center; /* Center bars horizontally */
-            align-items: flex-end;
-            height: 300px;
-            margin-top: 20px;
-            overflow-x: auto; /* Allow horizontal scrolling */
-            max-width: 100%; /* Ensure it doesn't exceed screen width */
-        }
-        .bar {
-            width: 2px; /* Reduced width to fit more elements */
-            margin: 0 1px; /* Add some spacing between bars */
-            background-color: blue;
-        }
-        button {
-            margin: 5px;
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        #elementsRange {
-            width: 300px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles2.css">
 </head>
 <body>
 
     <h1>Heap Sort Visualization</h1>
     <div id="swapCounter">Swaps: 0</div>
-    <div id="elementCount">Number of Elements: 100</div>
+    <div id="elementCount">Number of Elements: 25</div>
     
     <!-- Number of Elements Scroller -->
     <label for="elementsRange">Number of Elements:</label>
-    <input type="range" id="elementsRange" min="10" max="500" value="100">
+    <input type="range" id="elementsRange" min="10" max="60" value="25">
+
+    <!-- Speed Scroller -->
+    <label for="speedRange">Speed :</label>
+    <input type="range" id="speedRange" min="100" max="1000" value="600">
     
-    <button id="randomArray">Random Array (Average Case)</button>
-    <button id="worstCaseArray">Worst Case (Reverse Sorted)</button>
-    <button id="bestCaseArray">Best Case (Sorted)</button>
+    <button id="randomArray">Random</button>
+    <button id="worstCaseArray">Reverse Sorted</button>
+    <button id="bestCaseArray">Sorted</button>
     <button id="playButton">Play Sort</button>
     <button id="stopButton" style="display:none;">Stop Sort</button> <!-- Initially hidden -->
 
     <div id="container"></div>
+
+    <!-- Algorithm Description Section -->
+    <div id="description" class="block">
+        <h2>Heap Sort</h2>
+        <p><strong>What is it?</strong> Heap Sort is a comparison-based sorting algorithm that uses a binary heap data structure.</p>
+        <p><strong>How it works:</strong> It first transforms the array into a max heap, where the largest element is at the root. Then, it repeatedly removes the largest element and rebuilds the heap until all elements are sorted.</p>
+        <p><strong>Advantages:</strong> Efficient in terms of time complexity, especially for large datasets. It is an in-place sort, requiring only a small constant amount of additional storage space.</p>
+        <p><strong>Disadvantages:</strong> Its worst-case performance is not as good as some other algorithms like Quick Sort. It is also not stable, meaning equal elements may not maintain their original order.</p>
+        <p><strong>In memory:</strong> Heap Sort is performed in a binary tree structure where nodes represent elements of the array, allowing efficient access to the largest element.</p>
+        <p><strong>When to use:</strong> Heap Sort is good for large datasets and when you need guaranteed O(n log n) time complexity.</p>
+        <p><strong>When not to use:</strong> Avoid using it for small datasets or when stability is a concern.</p>
+    </div>
+
+    <table id="complexityTable">
+        <tr>
+            <th>Case</th>
+            <th>Time Complexity</th>
+            <th>Space Complexity</th>
+        </tr>
+        <tr>
+            <td>Best Case</td>
+            <td>O(n log n)</td>
+            <td>O(1)</td>
+        </tr>
+        <tr>
+            <td>Average Case</td>
+            <td>O(n log n)</td>
+            <td>O(1)</td>
+        </tr>
+        <tr>
+            <td>Worst Case</td>
+            <td>O(n log n)</td>
+            <td>O(1)</td>
+        </tr>
+    </table>
 
     <script src="heap.js"></script> 
 
