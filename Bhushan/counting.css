@@ -1,0 +1,39 @@
+.array-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 300px;
+  border: 2px solid #333;
+  margin-top: 20px;
+  position: relative;
+}
+
+.array-bar {
+  margin: 0 2px;
+  background-color: #3498db; /* Default blue color for the bars */
+  width: 20px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.array-value {
+  position: absolute;
+  top: -20px;
+  color: black;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.counting {
+  background-color: #f39c12; /* Orange color during the counting phase */
+}
+
+.placing {
+  background-color: #e74c3c; /* Red when placing elements into output */
+}
+
+.sorted {
+  background-color: #2ecc71; /* Green when fully sorted */
+}

@@ -1,0 +1,39 @@
+.array-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 300px;
+  border: 2px solid #333;
+  margin-top: 20px;
+  position: relative;
+}
+
+.array-bar {
+  margin: 0 2px;
+  background-color: #3498db;
+  width: 20px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.array-value {
+  position: absolute;
+  top: -20px; /* Adjust this value to move the number above the bars */
+  color: black;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.sorted {
+  background-color: #2ecc71;
+}
+
+.current-digit {
+  background-color: #f51515;
+}
+
+.finished {
+  background-color: #f1c40f;
+}
