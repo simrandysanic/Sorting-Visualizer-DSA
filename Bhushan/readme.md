@@ -1,1 +1,25 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bucket Sort Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Bucket Sort Visualizer</h1>
+    <div class="controls">
+      <label for="size">Array Size:</label>
+      <input type="range" id="size" min="5" max="50" value="20">
+      <label for="speed">Sorting Speed:</label>
+      <input type="range" id="speed" min="1" max="1000" value="500">
+      <button id="generateBtn">Generate Array</button>
+      <button id="startBtn">Start Sorting</button>
+    </div>
+    <div id="message" class="message">Welcome! Generate an array and start sorting.</div>
+    <div class="array-container" id="array-container"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
