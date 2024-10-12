@@ -29,11 +29,12 @@
 // function play(algorithm) {
 //     const copy = [...array]; // Work with a copy of the original array
 //     let moves;
-//             moves = selectionSort(copy);
+//             moves = insertionSort(copy);
 
 //     animate(moves);
 // }
-// // for bubble and selection
+
+// //for insertion sort
 // function animate(moves) {
 //     if (moves.length === 0) {
 //         // All moves completed; mark final sorted indices
@@ -44,11 +45,14 @@
 //     const [i, j] = move.indices;
 
 //     if (move.type === "swap") {
-//         [array[i], array[j]] = [array[j], array[i]];
+//         // Shift the element in the visualization
+//         [array[j], array[i]] = [array[i], array[j]];
 //     }
 
 //     playNote(200 + array[i] * 500);
-//     playNote(200 + array[j] * 500);
+//     if (j !== undefined) {
+//         playNote(200 + array[j] * 500);
+//     }
 
 //     showBars(move);
 
@@ -56,6 +60,7 @@
 //         animate(moves);
 //     }, 100);
 // }
+
 // function showBars(move) {
 //     const container = document.getElementById("container");
 //     container.innerHTML = "";
@@ -71,30 +76,12 @@
 //             bar.style.backgroundColor = "black"; // Default color
 //         }
 
-//                 container.appendChild(bar);
+        
+//         container.appendChild(bar);
 //     }
-// }
-// function selectionSort(array) {
-//     const moves = [];
-//     const n = array.length; // Get the length of the array
-//     for (let i = 0; i < n - 1; i++) {
-//         let minIndex = i; // Assume the minimum is the first element in the unsorted part
-//         for (let j = i + 1; j < n; j++) {
-//             moves.push({ indices: [minIndex, j], type: "comp" }); // Compare minIndex and j
-//             if (array[minIndex] > array[j]) {
-//                 minIndex = j; // Update the index of the minimum element
-//             }
-//         }
-//         // Only push the swap move if minIndex has changed
-//         if (minIndex !== i) {
-//             moves.push({ indices: [i, minIndex], type: "swap" }); // Track the indices of the swap
-//             [array[i], array[minIndex]] = [array[minIndex], array[i]]; // Perform the swap
-//         }
-//     }
-//     return moves;
 // }
 
-// SOUND FUNCTIONS
+
 // SOUND FUNCTIONS
 let audioCtx = null;
 
@@ -118,12 +105,12 @@ function playNote(freq) {
 let n = 100; // Default number of bars/numbers
 let array = []; // Array to hold the numbers generated
 let isAnimating = false; // Flag to prevent concurrent animations
-let swapCount = 0; // Counter to track the number of swaps
+let swapCount = 0; // Counter to track the number of swaps (for insertion sort, count shifts)
 let animationId; // To hold the animation ID for stopping it
 const animationSpeed = 500; // Default speed of animation in milliseconds
 
 // Initialize with random array by default and display bars
-initRandom();
+initRandom(); 
 
 // FUNCTIONS
 function initRandom() {
@@ -156,14 +143,14 @@ function initBest() {
     updateElementCountDisplay();
 }
 
-function playSelectionSort() {
+function playInsertionSort() {
     if (isAnimating) return; // Prevent starting another animation
     isAnimating = true;
     swapCount = 0; // Reset swap counter
     disableButtons();
     const copy = [...array]; // Work with a copy of the array
-    const swaps = selectionSort(copy); // Get list of swaps
-    animate(swaps); // Visualize the swap operations
+    const shifts = insertionSort(copy); // Get list of shifts
+    animate(shifts); // Visualize the shift operations
 }
 
 function stopAnimation() {
@@ -172,66 +159,60 @@ function stopAnimation() {
     clearTimeout(animationId); // Stop the animation
 }
 
-function animate(swaps) {
-    if (swaps.length === 0) {
+function animate(shifts) {
+    if (shifts.length === 0) {
         stopAnimation(); // Stop animation when complete
         colorSortedBars(); // Color sorted bars at the end
         return;
     }
+    const [i, j, value] = shifts.shift(); // Get next shift operation
+    array.splice(j, 1); // Remove the value from its original position
+    array.splice(i, 0, value); // Insert it at the correct position
 
-    const [i, j] = swaps.shift(); // Get next swap operation
-
-    // Even when i === j (self-swap), show the operation
-    [array[i], array[j]] = [array[j], array[i]]; // Perform swap, including self-swap
-    swapCount++; // Increment swap counter
+    swapCount++; // Increment shift counter
     updateSwapCounter();
 
-    // Play sound for the swapped elements
-    playNote(200 + array[i] * 500);
-    playNote(200 + array[j] * 500);
+    // Play sound for the moved element
+    playNote(200 + value * 500);
 
-    // Highlight bars being swapped, even in case of self-swap
-    showBars(i, j); // Highlight swapped bars (red)
-    
+    showBars(i, j); // Highlight shifted bars (red)
     animationId = setTimeout(() => {
-        animate(swaps); // Recursively animate the next swap
-    }, animationSpeed); // Use the predefined animation speed
+        animate(shifts);
+    }, animationSpeed); // Adjusted delay for better visibility
 }
 
-
-function selectionSort(arr) {
-    const swaps = [];
-    for (let i = 0; i < arr.length; i++) {
-        let minIndex = i;
-        for (let j = i + 1; j < arr.length; j++) {
-            if (arr[j] < arr[minIndex]) {
-                minIndex = j;
-            }
+function insertionSort(arr) {
+    const shifts = [];
+    for (let i = 1; i < arr.length; i++) {
+        let j = i - 1;
+        const currentValue = arr[i];
+        while (j >= 0 && arr[j] > currentValue) {
+            arr[j + 1] = arr[j]; // Shift elements to the right
+            shifts.push([j + 1, j, arr[j]]); // Track the shifts
+            j--;
         }
-        if (minIndex !== i) {
-            [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]]; // Perform the swap
-            swaps.push([i, minIndex]); // Track the swap
-        }
+        arr[j + 1] = currentValue;
+        shifts.push([j + 1, i, currentValue]); // Track final insertion
     }
-    return swaps;
+    return shifts;
 }
 
-function showBars(activeIndex1 = -1, activeIndex2 = -1) {
+function showBars(activeIndex1 = -1, activeIndex2 = -1, isSorted = false) {
     const container = document.getElementById("container");
     container.innerHTML = ""; 
-    const barWidth = Math.max(2, Math.floor(container.clientWidth / n));
+    const barWidth = Math.max(2, Math.floor(container.clientWidth / n)); 
 
     for (let i = 0; i < array.length; i++) {
         const bar = document.createElement("div");
         bar.style.height = array[i] * 100 + "%";
-        bar.style.width = barWidth + "px";
+        bar.style.width = barWidth + "px"; 
         bar.classList.add("bar");
-        bar.style.marginRight = "0px";
+        bar.style.marginRight = "0px"; 
 
         if (activeIndex1 !== -1 && (i === activeIndex1 || i === activeIndex2)) {
-            bar.style.backgroundColor = "red"; // Highlight current bars being compared
+            bar.style.backgroundColor = "red"; 
         } else {
-            bar.style.backgroundColor = "blue"; // Default bar color
+            bar.style.backgroundColor = "blue"; 
         }
 
         container.appendChild(bar);
@@ -241,13 +222,13 @@ function showBars(activeIndex1 = -1, activeIndex2 = -1) {
 function colorSortedBars() {
     const bars = document.getElementsByClassName("bar");
     for (let i = 0; i < bars.length; i++) {
-        bars[i].style.backgroundColor = "green"; // Color sorted bars
+        bars[i].style.backgroundColor = "green"; 
     }
 }
 
 function updateSwapCounter() {
     const swapDisplay = document.getElementById("swapCounter");
-    swapDisplay.innerText = `Swaps: ${swapCount}`; // Updated label for Selection Sort
+    swapDisplay.innerText = `Shifts: ${swapCount}`; // Updated label for Insertion Sort
 }
 
 function resetSwapCounter() {
@@ -265,8 +246,8 @@ function disableButtons() {
     document.getElementById("worstCaseArray").disabled = true;
     document.getElementById("bestCaseArray").disabled = true;
     document.getElementById("playButton").disabled = true;
-    document.getElementById("stopButton").style.display = "inline";
-    document.getElementById("elementsRange").disabled = true;
+    document.getElementById("stopButton").style.display = "inline"; 
+    document.getElementById("elementsRange").disabled = true; 
 }
 
 function enableButtons() {
@@ -274,22 +255,20 @@ function enableButtons() {
     document.getElementById("worstCaseArray").disabled = false;
     document.getElementById("bestCaseArray").disabled = false;
     document.getElementById("playButton").disabled = false;
-    document.getElementById("stopButton").style.display = "none";
-    document.getElementById("elementsRange").disabled = false;
+    document.getElementById("stopButton").style.display = "none"; 
+    document.getElementById("elementsRange").disabled = false; 
 }
 
 // HTML Buttons trigger the respective initialization functions
 document.getElementById("randomArray").addEventListener("click", initRandom);
 document.getElementById("worstCaseArray").addEventListener("click", initWorst);
 document.getElementById("bestCaseArray").addEventListener("click", initBest);
-document.getElementById("playButton").addEventListener("click", playSelectionSort);
+document.getElementById("playButton").addEventListener("click", playInsertionSort);
 document.getElementById("stopButton").addEventListener("click", stopAnimation);
 
 // Add event listeners for the number of elements selector
 document.getElementById("elementsRange").addEventListener("input", (e) => {
-    n = Math.min(parseInt(e.target.value), 500);
+    n = Math.min(parseInt(e.target.value), 500); 
     updateElementCountDisplay();
-    initRandom();
+    initRandom(); 
 });
-
-
