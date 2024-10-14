@@ -1,4 +1,3 @@
-
 // SOUND FUNCTIONS
 let audioCtx = null;
 
@@ -19,16 +18,17 @@ function playNote(freq) {
 }
 
 // GLOBAL VARIABLES
-let s = 600;
+let s = 600; // Delay for animation
 let n = 25; // Default number of bars/numbers
 let array = []; // Array to hold the numbers generated
 let isAnimating = false; // Flag to prevent concurrent animations
 let swapCount = 0; // Counter to track the number of swaps
 let animationId; // To hold the animation ID for stopping it
+let remainingSwaps = []; // Store the remaining swaps when paused
 const animationSpeed = 100; // Default speed of animation in milliseconds
 
 // Initialize with random array by default and display bars
-initRandom(); 
+initRandom();
 
 // FUNCTIONS
 function initRandom() {
@@ -37,7 +37,7 @@ function initRandom() {
         array.push(Math.random()); // Random array (average case)
     }
     showBars();
-    resetSwapCounter(); // Reset swap count on button click
+    resetSwapCounter(); // Reset swap count on new array initialization
     updateElementCountDisplay();
 }
 
@@ -47,7 +47,7 @@ function initWorst() {
         array.push(i / n); // Worst case (reverse sorted array)
     }
     showBars();
-    resetSwapCounter(); // Reset swap count on button click
+    resetSwapCounter(); // Reset swap count on new array initialization
     updateElementCountDisplay();
 }
 
@@ -57,46 +57,53 @@ function initBest() {
         array.push(i / n); // Best case (already sorted array)
     }
     showBars();
-    resetSwapCounter(); // Reset swap count on button click
+    resetSwapCounter(); // Reset swap count on new array initialization
     updateElementCountDisplay();
 }
 
 function playBubbleSort() {
     if (isAnimating) return; // Prevent starting another animation
     isAnimating = true;
-    swapCount = 0; // Reset swap counter
+    
+    if (remainingSwaps.length === 0) { 
+        // Start sorting from scratch if no remaining swaps
+        swapCount = 0; // Reset swap counter on a new sort
+        const copy = [...array]; // Work with a copy of the array
+        remainingSwaps = bubbleSort(copy); // Get list of swaps
+    }
+    
     disableButtons();
-    const copy = [...array]; // Work with a copy of the array
-    const swaps = bubbleSort(copy); // Get list of swaps
-    animate(swaps); // Visualize the swap operations
+    animate(remainingSwaps); // Visualize the remaining swap operations
 }
 
 function stopAnimation() {
     isAnimating = false; // Reset flag when done
     enableButtons();
-    clearTimeout(animationId); // Stop the animation
+    clearTimeout(animationId); // Stops the animation by canceling the scheduled setTimeout call
 }
 
 function animate(swaps) {
     if (swaps.length === 0) {
         stopAnimation(); // Stop animation when complete
         colorSortedBars(); // Color sorted bars at the end
+        remainingSwaps = []; // Clear remaining swaps since sorting is complete
         return;
     }
+    
     const [i, j] = swaps.shift(); // Get next swap operation
-
+    
     // Swap the elements in the array
     [array[i], array[j]] = [array[j], array[i]];
     swapCount++; // Increment swap counter
     updateSwapCounter();
-
+    
     // Play sound for the swapped elements
     playNote(200 + array[i] * 500);
     playNote(200 + array[j] * 500);
-
+    
     showBars(i, j); // Highlight swapped bars (red)
     animationId = setTimeout(() => {
-        animate(swaps);
+        animate(swaps); // Continue the animation with remaining swaps
     }, s); // Adjusted delay for better visibility
 }
 
@@ -147,26 +154,28 @@ function showBars(activeIndex1 = -1, activeIndex2 = -1, isSorted = false) {
         container.appendChild(bar);
 
         // Create a span for the number above the bar
-        const numberSpan = document.createElement("span");
-        numberSpan.innerText = Math.floor(array[i] * 100); // Show the number corresponding to the bar height
-        numberSpan.style.fontSize = "12px"; // Adjust the font size for readability
-        numberSpan.style.position = "absolute"; // Position the number absolutely
-        numberSpan.style.left = `${i * (barWidth + 1)}px`; // Match the bar's left position
-
-        // Position the number slightly above the bar, with a little space
-        numberSpan.style.bottom = `${(array[i] / maxValue) * barMaxHeight + 2}%`; // Add 2% to position the number above the bar
-
+        const numberSpan = document.createElement("span"); // Create a span for the label
+        numberSpan.innerText = Math.floor(array[i] * 100); // Convert the value to a whole number
+        numberSpan.style.fontSize = "12px"; // Adjust font size for readability
+        numberSpan.style.position = "absolute"; // Position it absolutely
+        
+        // Adjust the left position to center the number over the bar
+        numberSpan.style.left = `${i * (barWidth + 1) + barWidth / 2}px`; 
+        
+        // Use CSS transform to align the center of the number with the center of the bar
+        numberSpan.style.transform = "translateX(-50%)"; 
+        
+        // Position the number slightly above the bar
+        numberSpan.style.bottom = `${(array[i] / maxValue) * barMaxHeight + 2}%`;
+        
         // Append the number span to the container
         container.appendChild(numberSpan);
+        
     }
 
     // Ensure the container has enough height for the bars and numbers
     container.style.height = "350px"; // Ensure container has enough height
 }
-
-
-
-
 
 function colorSortedBars() {
     const bars = document.getElementsByClassName("bar");
@@ -190,9 +199,10 @@ function updateElementCountDisplay() {
     elementCountDisplay.innerText = `Number of Elements: ${n}`;
 }
 function updateSpeedDisplay() {
-    const speedDisplay = document.querySelector('.speed');
-    speedDisplay.innerText = `Speed: ${s}`;
+    const speedDisplay = document.getElementById('speedDisplay');
+    speedDisplay.innerText = `Speed: ${s} ms`;
 }
+
 
 function disableButtons() {
     document.getElementById("randomArray").disabled = true;
@@ -221,15 +231,16 @@ document.getElementById("bestCaseArray").addEventListener("click", initBest);
 document.getElementById("playButton").addEventListener("click", playBubbleSort);
 document.getElementById("stopButton").addEventListener("click", stopAnimation);
 
-// Add event listeners for the number of elements selector
-document.getElementById("elementsRange").addEventListener("input", (e) => {
-    n = Math.min(parseInt(e.target.value), 500); 
+// Slider to adjust the number of elements (bars) in the array
+document.getElementById("elementsRange").addEventListener("input", function() {
+    n = parseInt(this.value);
+    initRandom();
     updateElementCountDisplay();
-    initRandom(); 
 });
-// Add event listener for the speed selector
-document.getElementById("speedRange").addEventListener("input", (e) => {
-    s = 1000 - parseInt(e.target.value); // Invert speed range, as lower values should be faster
+
+// Slider to adjust the animation speed
+document.getElementById("speedRange").addEventListener("input", function() {
+    s = 1100 - parseInt(this.value); // Invert the delay calculation
     updateSpeedDisplay();
 });
 
