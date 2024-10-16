@@ -3,64 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INSERTION SORT</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Bubble Sort Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #container {
+            position: relative;
+            overflow: hidden; /* Hide overflow to keep bars inside */
+            display: flex;
+            justify-content: center; /* Center bars horizontally */
+            align-items: flex-end;
+            height: 450px;
+            margin-top: 60px;
+          /*  overflow-x: auto; /* Allow horizontal scrolling */
+            max-width: 100%; /* Ensure it doesn't exceed screen width */
+            border: 3px solid black;
+        }
+        .bar {
+            width: 2px; /* Reduced width to fit more elements */
+            margin: 0 1px; /* Add some spacing between bars */
+            background-color: blue;
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #elementsRange, #speedRange {
+            width: 300px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <nav id="navbar">
 
-        <h1>INSERTION SORT</h1>
-    </nav>
+    <h1>Bubble Sort Visualization</h1>
+    <div id="swapCounter">Swaps: 0</div>
+    <div id="elementCount">Number of Elements: 25</div>
+  
+    
+    
+    <!-- Number of Elements Scroller -->
+    <label for="elementsRange">Number of Elements:</label>
+    <input type="range" id="elementsRange" min="5" max="60" value="25">
+    
+    <!-- Speed Scroller -->
+    <label for="speedRange">Speed :</label>
+    <input type="range" id="speedRange" min="100" max="1000" value="600">
+    
+    <button id="randomArray">Random Array</button>
+    <button id="worstCaseArray">Reverse Sorted</button>
+    <button id="bestCaseArray">Sorted</button>
+    <button id="playButton">Play</button>
+    <button id="stopButton" style="display:none;">Stop</button> <!-- Initially hidden -->
+
     <div id="container"></div>
 
-    <hr>
-    <div id="buttons">
-
-        <button onclick="init()">init</button>
-        <button onclick="play()">play</button>
-
-    </div>
-    <div id="data">
-
-        <div id="para">
-
-            <h1>INSERTION SORT</h1>
-            <p>Insertion Sort is a straightforward and efficient sorting algorithm that builds a sorted sequence one element at a time. It works by dividing the array into a sorted and an unsorted region. The algorithm iteratively takes each element from the unsorted region and inserts it into the correct position within the sorted region, much like how one might sort playing cards in their hands. This process involves comparing the key element with its predecessors, shifting larger elements to the right, and placing the key in its rightful spot. With a best-case time complexity of O(n) for nearly sorted data, Insertion Sort excels in simplicity, stability, and adaptability for small datasets, making it a favored choice for many practical applications.
-
-
-                
-            </p>
-        </div>
-        <div id="table">
-
-            
-            <h1>Time Complexity</h1>
-            
-            <table>
-                <tr>
-                    <th>Best Case</th>
-                    <th>Average Case</th>
-                    <th>Worst Case</th>
-                    <th>Space Complexity</th>
-                </tr>
-                <tr>
-                    <td>O(n)</td>
-                    <td>O(n²)</td>
-                    <td>O(n²)</td>
-                    <td>O(1)</td>
-                </tr>
-                
-            </table>
-            
-        </div>
-
-
-
-
-    </div>
-
-    <script src="vizual.js"></script>
-    <script src="insertion.js"></script>
+    <script src="bubble.js"></script> 
 
 </body>
 </html>
