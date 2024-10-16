@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selection Sort Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #container {
+            position: relative;
+            overflow: hidden; /* Hide overflow to keep bars inside */
+            display: flex;
+            justify-content: center; /* Center bars horizontally */
+            align-items: flex-end;
+            height: 450px;
+            margin-top: 60px;
+            max-width: 100%; /* Ensure it doesn't exceed screen width */
+            border: 3px solid black;
+        }
+        .bar {
+            width: 2px; /* Reduced width to fit more elements */
+            margin: 0 1px; /* Add some spacing between bars */
+            background-color: blue;
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #elementsRange, #speedRange {
+            width: 300px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Selection Sort Visualization</h1>
+    <div id="swapCounter">Swaps: 0</div>
+    <div id="elementCount">Number of Elements: 25</div>
+  
+    
+    
+    <!-- Number of Elements Scroller -->
+    <label for="elementsRange">Number of Elements:</label>
+    <input type="range" id="elementsRange" min="5" max="60" value="25">
+    
+    <!-- Speed Scroller -->
+    <label for="speedRange">Speed :</label>
+    <input type="range" id="speedRange" min="100" max="1000" value="600">
+    
+    <button id="randomArray">Random Array</button>
+    <button id="worstCaseArray">Reverse Sorted</button>
+    <button id="bestCaseArray">Sorted</button>
+    <button id="playButton">Play</button>
+    <button id="stopButton" style="display:none;">Stop</button> <!-- Initially hidden -->
+
+    <div id="container"></div>
+
+    <script src="selection.js"></script> 
+
+</body>
+</html>
