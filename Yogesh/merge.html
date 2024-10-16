@@ -3,64 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MERGE SORT</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Merge Sort Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #container {
+            position: relative;
+            overflow: hidden; /* Hide overflow to keep bars inside */
+            display: flex;
+            justify-content: center; /* Center bars horizontally */
+            align-items: flex-end;
+            height: 450px;
+            margin-top: 60px;
+          /*  overflow-x: auto; /* Allow horizontal scrolling */
+            max-width: 100%; /* Ensure it doesn't exceed screen width */
+            border: 3px solid black;
+        }
+        .bar {
+            width: 2px; /* Reduced width to fit more elements */
+            margin: 0 1px; /* Add some spacing between bars */
+            background-color: blue;
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #elementsRange, #speedRange {
+            width: 300px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <nav id="navbar">
 
-        <h1>MERGE SORT</h1>
-    </nav>
+    <h1>Merge Sort Visualization</h1>
+    <div id="MergeCounter">Merges: 0</div>
+    <div id="elementCount">Number of Elements: 25</div>
+  
+    
+    
+    <!-- Number of Elements Scroller -->
+    <label for="elementsRange">Number of Elements:</label>
+    <input type="range" id="elementsRange" min="5" max="60" value="25">
+    
+    <!-- Speed Scroller -->
+    <label for="speedRange">Speed :</label>
+    <input type="range" id="speedRange" min="100" max="1000" value="600">
+    
+    <button id="randomArray">Random Array</button>
+    <button id="worstCaseArray">Reverse Sorted</button>
+    <button id="bestCaseArray">Sorted</button>
+    <button id="playButton">Play</button>
+    <button id="stopButton" style="display:none;">Stop</button> <!-- Initially hidden -->
+
     <div id="container"></div>
 
-    <hr>
-    <div id="buttons">
-
-        <button onclick="init()">init</button>
-        <button onclick="play()">play</button>
-
-    </div>
-    <div id="data">
-
-        <div id="para">
-
-            <h1>MERGE SORT</h1>
-            <p>Merge Sort is a highly efficient, divide-and-conquer sorting algorithm that systematically breaks down an array into smaller subarrays, sorts them, and then merges them back together into a single, sorted array. By recursively dividing the array until each subarray contains only one element, Merge Sort leverages the inherent order of these single elements to merge them back in sorted order. With a guaranteed time complexity of O(n log n), it performs exceptionally well even with large datasets. Its stability and ability to handle large arrays make Merge Sort a robust choice for applications where performance and reliability are critical, such as in databases and large-scale data processing.
-
-
-                
-            </p>
-        </div>
-        <div id="table">
-
-            
-            <h1>Time Complexity</h1>
-            
-            <table>
-                <tr>
-                    <th>Best Case</th>
-                    <th>Average Case</th>
-                    <th>Worst Case</th>
-                    <th>Space Complexity</th>
-                </tr>
-                <tr>
-                    <td>O(n log n)</td>
-                    <td>O(n log n)</td>
-                    <td>O(n log n)</td>
-                    <td>O(n)</td>
-                </tr>
-                
-            </table>
-            
-        </div>
-
-
-
-
-    </div>
-
-    <script src="vizual.js"></script>
-    <script src="merge.js"></script>
+    <script src="merge.js"></script> 
 
 </body>
 </html>
