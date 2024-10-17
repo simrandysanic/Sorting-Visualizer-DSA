@@ -17,7 +17,6 @@
             align-items: flex-end;
             height: 450px;
             margin-top: 60px;
-          /*  overflow-x: auto; /* Allow horizontal scrolling */
             max-width: 100%; /* Ensure it doesn't exceed screen width */
             border: 3px solid black;
         }
@@ -43,17 +42,16 @@
     <h1>Bubble Sort Visualization</h1>
     <div id="swapCounter">Swaps: 0</div>
     <div id="elementCount">Number of Elements: 25</div>
-  
-    
-    
+    <div id="statusMessage">Status: Initialized with a Random array.</div>
+
     <!-- Number of Elements Scroller -->
     <label for="elementsRange">Number of Elements:</label>
     <input type="range" id="elementsRange" min="5" max="60" value="25">
-    
+
     <!-- Speed Scroller -->
-    <label for="speedRange">Speed :</label>
+    <label for="speedRange">Speed:</label>
     <input type="range" id="speedRange" min="100" max="1000" value="600">
-    
+
     <button id="randomArray">Random Array</button>
     <button id="worstCaseArray">Reverse Sorted</button>
     <button id="bestCaseArray">Sorted</button>
