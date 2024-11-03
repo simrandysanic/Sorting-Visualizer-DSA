@@ -27,7 +27,7 @@ let animationId; // To hold the animation ID for stopping it
 const animationSpeed = 100; // Default speed of animation in milliseconds
 
 // Initialize with random array by default and display bars
-initRandom(); 
+initRandom();
 
 // FUNCTIONS
 function initRandom() {
@@ -63,7 +63,7 @@ function initBest() {
 function playQuickSort() {
     if (isAnimating) return; // Prevent starting another animation
     isAnimating = true;
-    swapCount = 0; // Reset swap counter
+    //swapCount = 0; // Reset swap counter
     disableButtons();
     const copy = [...array]; // Work with a copy of the array
     const swaps = quickSort(copy); // Get list of swaps
@@ -83,19 +83,27 @@ function animate(swaps) {
         return;
     }
     const [i, j] = swaps.shift(); // Get next pair of indices to swap
-    [array[i], array[j]] = [array[j], array[i]]; // Perform the swap
-    swapCount++; // Increment swap counter
-    updateSwapCounter();
 
-    // Play sound for the swapped elements
-    playNote(200 + array[i] * 500);
-    playNote(200 + array[j] * 500);
+    // Highlight the pivot if it's the current iteration
+    if (i === j) {
+        showBars(i, -1, true); // Highlight pivot with i and no active swap
+    } else {
+        [array[i], array[j]] = [array[j], array[i]]; // Perform the swap
+        swapCount++; // Increment swap counter
+        updateSwapCounter();
 
-    showBars(i, j); // Highlight swapped bars (red)
+        // Play sound for the swapped elements
+        playNote(200 + array[i] * 500);
+        playNote(200 + array[j] * 500);
+
+        showBars(i, j); // Highlight swapped bars (red)
+    }
+
     animationId = setTimeout(() => {
         animate(swaps);
     }, s); // Adjusted delay for better visibility
 }
+
 
 function quickSort(arr) {
     const swaps = [];
@@ -115,6 +123,8 @@ function partition(arr, low, high, swaps) {
     let pivot = arr[high];
     let i = low - 1;
 
+    swaps.push([high, high]); // Storing the pivot index for highlighting
+
     for (let j = low; j < high; j++) {
         if (arr[j] < pivot) {
             i++;
@@ -128,7 +138,8 @@ function partition(arr, low, high, swaps) {
     return i + 1;
 }
 
-function showBars(activeIndex1 = -1, activeIndex2 = -1) {
+
+function showBars(activeIndex1 = -1, activeIndex2 = -1, isPivot = false) {
     const container = document.getElementById("container");
     container.innerHTML = ""; // Clear previous bars
     const barWidth = Math.max(2, Math.floor(container.clientWidth / n)); // Calculate bar width based on container width and number of elements
@@ -150,7 +161,9 @@ function showBars(activeIndex1 = -1, activeIndex2 = -1) {
         //bar.style.marginRight = "0px";
 
         // Color bars differently based on their status
-        if (activeIndex1 !== -1 && (i === activeIndex1 || i === activeIndex2)) {
+        if (isPivot && i === activeIndex1) {
+            bar.style.backgroundColor = "#00BFFF"; // Pivot bar
+        } else if (activeIndex1 !== -1 && (i === activeIndex1 || i === activeIndex2)) {
             bar.style.backgroundColor = "#FFEEAD"; // Swapped bars
         } else {
             bar.style.backgroundColor = "#5d5d77"; // Unsorted bars
@@ -164,7 +177,7 @@ function showBars(activeIndex1 = -1, activeIndex2 = -1) {
         numberSpan.innerText = Math.floor(array[i] * 100); // Show the number corresponding to the bar height
         numberSpan.style.fontSize = "12px"; // Adjust the font size for readability
         numberSpan.style.position = "absolute"; // Position the number absolutely
-        numberSpan.style.left = `${i * (barWidth + 1)+ barWidth / 2 - 8}px`; // Match the bar's left position
+        numberSpan.style.left = `${i * (barWidth + 1) + barWidth / 2 - 8}px`; // Match the bar's left position
 
         // Position the number slightly above the bar, with a little space
         numberSpan.style.bottom = `${(array[i] / maxValue) * barMaxHeight + 2}%`; // Add 2% to position the number above the bar
@@ -175,10 +188,11 @@ function showBars(activeIndex1 = -1, activeIndex2 = -1) {
     }
 }
 
+
 function colorSortedBars() {
     const bars = document.getElementsByClassName("bar");
     for (let i = 0; i < bars.length; i++) {
-        bars[i].style.backgroundColor = "#96CEB4"; 
+        bars[i].style.backgroundColor = "#96CEB4";
     }
 }
 
@@ -203,7 +217,7 @@ function disableButtons() {
     document.getElementById("worstCaseArray").disabled = true;
     document.getElementById("bestCaseArray").disabled = true;
     document.getElementById("playButton").disabled = true;
-    document.getElementById("stopButton").style.display = "inline"; 
+    document.getElementById("stopButton").style.display = "inline";
     document.getElementById("elementsRange").disabled = true;
 }
 
@@ -212,7 +226,7 @@ function enableButtons() {
     document.getElementById("worstCaseArray").disabled = false;
     document.getElementById("bestCaseArray").disabled = false;
     document.getElementById("playButton").disabled = false;
-    document.getElementById("stopButton").style.display = "none"; 
+    document.getElementById("stopButton").style.display = "none";
     document.getElementById("elementsRange").disabled = false;
 }
 
@@ -225,9 +239,9 @@ document.getElementById("stopButton").addEventListener("click", stopAnimation);
 
 // Add event listeners for the number of elements selector
 document.getElementById("elementsRange").addEventListener("input", (e) => {
-    n = Math.min(parseInt(e.target.value), 60); 
+    n = Math.min(parseInt(e.target.value), 60);
     updateElementCountDisplay();
-    initRandom(); 
+    initRandom();
 });
 // Add event listener for the speed selector
 document.getElementById("speedRange").addEventListener("input", (e) => {

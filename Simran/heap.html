@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heap Sort Visualization</title>
     <link rel="stylesheet" href="styles2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
 </head>
 <body>
 
@@ -23,12 +24,12 @@
     <button id="randomArray">Random</button>
     <button id="worstCaseArray">Reverse Sorted</button>
     <button id="bestCaseArray">Sorted</button>
-    <button id="playButton">Play Sort</button>
-    <button id="stopButton" style="display:none;">Stop Sort</button> <!-- Initially hidden -->
+    <button id="playButton"><i class="fas fa-play"></i></button> 
+    <button id="stopButton" style="display:none;"><i class="fas fa-stop"></i></button> <!-- Initially hidden -->
 
     <div id="container"></div>
 
-    <!-- Algorithm Description Section -->
+    <!-- Algorithm Description Section
     <div id="description" class="block">
         <h2>Heap Sort</h2>
         <p><strong>What is it?</strong> Heap Sort is a comparison-based sorting algorithm that uses a binary heap data structure.</p>
@@ -61,7 +62,7 @@
             <td>O(n log n)</td>
             <td>O(1)</td>
         </tr>
-    </table>
+    </table> -->
 
     <script src="heap.js"></script> 
 

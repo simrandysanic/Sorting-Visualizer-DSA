@@ -24,10 +24,13 @@ let array = []; // Array to hold the numbers generated
 let isAnimating = false; // Flag to prevent concurrent animations
 let swapCount = 0; // Counter to track the number of swaps
 let animationId; // To hold the animation ID for stopping it
+let currentIndex = 0; // Current position in the animation
 const animationSpeed = 100; // Default speed of animation in milliseconds
+let swaps = []; // Keep track of the swaps
 
 // Initialize with random array by default and display bars
 initRandom();
+
 
 // FUNCTIONS
 function initRandom() {
@@ -38,6 +41,7 @@ function initRandom() {
     showBars();
     resetSwapCounter(); // Reset swap count on button click
     updateElementCountDisplay();
+    currentIndex = 0; // Reset the animation index
 }
 
 function initWorst() {
@@ -48,6 +52,7 @@ function initWorst() {
     showBars();
     resetSwapCounter(); // Reset swap count on button click
     updateElementCountDisplay();
+    currentIndex = 0; // Reset the animation index
 }
 
 function initBest() {
@@ -58,17 +63,20 @@ function initBest() {
     showBars();
     resetSwapCounter(); // Reset swap count on button click
     updateElementCountDisplay();
+    currentIndex = 0; // Reset the animation index
 }
 
 function playHeapSort() {
     if (isAnimating) return; // Prevent starting another animation
     isAnimating = true;
-    swapCount = 0; // Reset swap counter
     disableButtons();
-    const copy = [...array]; // Work with a copy of the array
-    const swaps = heapSort(copy); // Get list of swaps
-    animate(swaps); // Visualize the swaps
+    if (currentIndex === 0) {
+        const copy = [...array]; // Work with a copy of the array
+        swaps = heapSort(copy); // Get list of swaps
+    }
+    animate(); // Visualize the swaps
 }
+
 
 function stopAnimation() {
     isAnimating = false; // Reset flag when done
@@ -76,13 +84,13 @@ function stopAnimation() {
     clearTimeout(animationId); // Stop the animation
 }
 
-function animate(swaps) {
-    if (swaps.length === 0) {
+function animate() {
+    if (currentIndex >= swaps.length) {
         stopAnimation(); // Stop animation when complete
         colorSortedBars(); // Color sorted bars at the end
         return;
     }
-    const [i, j] = swaps.shift(); // Get next pair of indices to swap
+    const [i, j] = swaps[currentIndex]; // Get next pair of indices to swap
     [array[i], array[j]] = [array[j], array[i]]; // Perform the swap
     swapCount++; // Increment swap counter
     updateSwapCounter();
@@ -92,10 +100,10 @@ function animate(swaps) {
     playNote(200 + array[j] * 500);
 
     showBars(i, j); // Highlight swapped bars (red)
-    animationId = setTimeout(() => {
-        animate(swaps);
-    }, s); // Adjusted delay for better visibility
+    currentIndex++; // Move to the next swap
+    animationId = setTimeout(animate, s); // Adjusted delay for better visibility
 }
+
 
 function heapSort(arr) {
     const swaps = [];
