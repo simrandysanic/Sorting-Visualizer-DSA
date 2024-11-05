@@ -229,6 +229,7 @@ function disableButtons() {
     document.getElementById("playButton").disabled = true;
     document.getElementById("stopButton").style.display = "inline"; 
     document.getElementById("elementsRange").disabled = true;
+    document.getElementById("speedRange").disabled = true;
 }
 
 function enableButtons() {
@@ -238,6 +239,7 @@ function enableButtons() {
     document.getElementById("playButton").disabled = false;
     document.getElementById("stopButton").style.display = "none"; 
     document.getElementById("elementsRange").disabled = false;
+    document.getElementById("speedRange").disabled = false;
 }
 
 // HTML Buttons trigger the respective initialization functions
