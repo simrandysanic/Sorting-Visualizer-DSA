@@ -191,25 +191,63 @@ function countingSortByDigit(arr, exp, operations) {
 
 
 
-function showBars(activeIndex = -1, isSorted = false) {
+function showBars(activeIndex1 = -1, activeIndex2 = -1, isSorted = false) {
     const container = document.getElementById("container");
-    container.innerHTML = ""; 
-    const barWidth = Math.max(2, Math.floor(container.clientWidth / n)); 
+    container.innerHTML = ""; // Clear previous bars
 
+    // Set the width and height of the container (increase width further)
+    const containerWidth = 1500;  // Set a larger width for the container (increased width)
+    const containerHeight = 350;  // Set a fixed height for the container
+
+    // Set the container's width and height in JavaScript
+    container.style.width = `${containerWidth}px`;
+    container.style.height = `${containerHeight}px`;
+    container.style.overflowX = "hidden";  // Prevent horizontal scroll
+    container.style.position = "absolute"; // Absolute positioning to control centering
+    
+    // Adjust top positioning to move the container a little lower on the screen
+    container.style.top = "60%";  // Move the container down 10% from the top of the screen
+    container.style.left = "50%"; // Horizontally center the container
+    container.style.transform = "translate(-50%, -50%)"; // Ensure true centering
+    container.style.border = "2px solid black"; // Add a border to make the container look like a rectangular box
+    container.style.boxSizing = "border-box"; // Ensure border is included in the size
+
+    // Calculate the width of each bar based on the container width and the number of bars
+    const barWidth = Math.max(5, Math.floor(containerWidth / array.length) - 2); // Adjust bar width dynamically
+
+    // Calculate maximum height for the bars based on the container height
+    const maxValue = Math.max(...array);  // Get the maximum value from the array to scale the bars
+    const maxHeight = 80;  // Max height of the bars as a percentage of container height
+
+    // Create bars and position them
     for (let i = 0; i < array.length; i++) {
         const bar = document.createElement("div");
-        bar.style.height = (array[i] / 10) + "%"; // Adjusted for radix sort (range 0-999)
-        bar.style.width = barWidth + "px"; 
+        bar.style.position = "absolute"; // Position bars absolutely within the container
+        bar.style.bottom = "0"; // Set bars to start from the bottom
+        bar.style.height = `${(array[i] / maxValue) * maxHeight}%`; // Set height relative to maxValue
+        bar.style.width = `${barWidth}px`; // Set the width of each bar
         bar.classList.add("bar");
-        bar.style.marginRight = "0px"; 
 
-        if (i === activeIndex) {
-            bar.style.backgroundColor = "red"; 
-        } else {
-            bar.style.backgroundColor = "blue"; 
-        }
+        // Set the background color based on whether the bar is active or not
+        bar.style.backgroundColor = (activeIndex1 === i || activeIndex2 === i) ? "red" : "blue";
 
+        // Set the left position to distribute bars evenly
+        bar.style.left = `${i * (barWidth + 2)}px`; // Add 2px spacing between bars
+
+        // Append the bar to the container
         container.appendChild(bar);
+
+        // Create a span for the number above the bar
+        const numberSpan = document.createElement("span");
+        numberSpan.innerText = Math.floor(array[i]); // Convert the value to a whole number for display
+        numberSpan.style.fontSize = "12px";  // Adjust font size for readability
+        numberSpan.style.position = "absolute"; // Position it absolutely above the bar
+        numberSpan.style.left = `${i * (barWidth + 2) + barWidth / 2}px`; // Center the number above the bar
+        numberSpan.style.transform = "translateX(-50%)";  // Align the number horizontally at the center of the bar
+        numberSpan.style.bottom = `${(array[i] / maxValue) * maxHeight + 2}%`;  // Position the number slightly above the bar
+
+        // Append the number span to the container
+        container.appendChild(numberSpan);
     }
 }
 
