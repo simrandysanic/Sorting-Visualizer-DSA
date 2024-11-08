@@ -191,7 +191,7 @@ function showBars(activeIndex1 = -1, activeIndex2 = -1, isSorted = false) {
     container.style.position = "absolute"; // Absolute positioning to control centering
     
     // Adjust top positioning to move the container a little lower on the screen
-    container.style.top = "60%";  // Move the container down 10% from the top of the screen
+    container.style.top = "190%";  // Move the container down 10% from the top of the screen
     container.style.left = "50%"; // Horizontally center the container
     container.style.transform = "translate(-50%, -50%)"; // Ensure true centering
     container.style.border = "2px solid black"; // Add a border to make the container look like a rectangular box
