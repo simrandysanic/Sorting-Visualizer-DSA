@@ -17,7 +17,8 @@ function playNote(freq) {
 }
 
 // GLOBAL VARIABLES
-let n = 100; // Default number of bars/numbers
+let s = 600; // Default speed (600 ms)
+let n = 25; // Default number of bars/numbers
 let array = []; // Array to hold the numbers generated
 let isAnimating = false; // Flag to prevent concurrent animations
 let swapCount = 0; // Counter to track the number of operations
@@ -41,6 +42,15 @@ function initRandom() {
     updateElementCountDisplay();
 }
 
+// Helper function to shuffle an array (Fisher-Yates algorithm)
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]]; // Swap elements
+    }
+    return arr;
+}
+
 function initWorst() {
     console.log("Generating worst-case array"); // Debugging line
 
@@ -48,16 +58,18 @@ function initWorst() {
     
     // Generate 3-digit numbers in descending order
     for (let i = Math.min(n, 50); i > 0; i--) {
-        array.push(900 + i); // Generates random 3-digit numbers around 900-999
+        array.push(9000 + i); // Generates random 3-digit numbers around 900-999
     }
     // Generate 2-digit numbers in descending order if needed
     for (let i = Math.min(n - array.length, 50); i > 0; i--) {
-        array.push(90 + i); // Generates random 2-digit numbers around 90-99
+        array.push(900 + i); // Generates random 2-digit numbers around 90-99
     }
     // Generate 1-digit numbers in descending order if needed
     for (let i = Math.min(n - array.length, 10); i > 0; i--) {
         array.push(i); // Generates random 1-digit numbers around 0-9
     }
+
+    array = shuffleArray(array);
 
     showBars(); // Display the generated array
     resetSwapCounter(); // Reset operation count on button click
@@ -73,7 +85,7 @@ function initBest() {
 
     // Generate a best-case scenario array with uniformly increasing three-digit numbers
     for (let i = 0; i < n; i++) {
-        array.push(500 + i); // Stays within three-digit numbers (100 to 100 + n - 1)
+        array.push(i + 1); // Stays within three-digit numbers (100 to 100 + n - 1)
     }
 
     showBars();
@@ -132,7 +144,7 @@ function animate(operations) {
     if (isAnimating) {
         animationId = setTimeout(() => {
             animate(operations);
-        }, animationSpeed); // Use animationSpeed variable
+        }, s); // Use animationSpeed variable
     }
 }
 
@@ -273,6 +285,8 @@ function updateElementCountDisplay() {
     elementCountDisplay.innerText = `Number of Elements: ${n}`;
 }
 
+
+
 function disableButtons() {
     document.getElementById("randomArray").disabled = true;
     document.getElementById("worstCaseArray").disabled = true;
@@ -310,5 +324,5 @@ document.getElementById("elementsRange").addEventListener("input", (e) => {
 // Slider to adjust the animation speed
 document.getElementById("speedRange").addEventListener("input", function() {
     s = 1100 - parseInt(this.value); // Invert the delay calculation
-    updateSpeedDisplay();
+   
 });

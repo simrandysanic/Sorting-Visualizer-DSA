@@ -18,7 +18,7 @@ function playNote(freq) {
 
 // GLOBAL VARIABLES
 let s = 600; // Delay for animation
-let n = 100; // Default number of bars/numbers
+let n = 25; // Default number of bars/numbers
 let array = []; // Array to hold the numbers generated
 let isAnimating = false; // Flag to prevent concurrent animations
 let swapCount = 0; // Counter to track the number of operations
@@ -252,10 +252,7 @@ function updateElementCountDisplay() {
     elementCountDisplay.innerText = `Number of Elements: ${n}`;
 }
 
-function updateSpeedDisplay() {
-    const speedDisplay = document.getElementById('speedDisplay');
-    speedDisplay.innerText = `Speed: ${s} ms`;
-}
+
 
 
 function disableButtons() {
@@ -295,5 +292,5 @@ document.getElementById("elementsRange").addEventListener("input", (e) => {
 // Slider to adjust the animation speed
 document.getElementById("speedRange").addEventListener("input", function() {
     s = 1100 - parseInt(this.value); // Invert the delay calculation
-    updateSpeedDisplay();
+   
 });
