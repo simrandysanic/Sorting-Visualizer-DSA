@@ -126,20 +126,23 @@ function animate(swaps) {
     }, s);
 }
 
-// Bubble Sort function that returns the swap operations
 function bubbleSort(arr) {
     const swaps = [];
     let swapped;
-    do {
+    for(let i =0;i<arr.length - 1;i++)
+    {
         swapped = false;
-        for (let i = 0; i < arr.length - 1; i++) {
-            if (arr[i] > arr[i + 1]) {
-                [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
-                swaps.push([i, i + 1]);
+        for (let j = 0; j < arr.length - 1-i; j++) {
+            if (arr[j] > arr[j + 1]) {
+                [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                swaps.push([j, j + 1]);
                 swapped = true;
             }
         }
-    } while (swapped);
+        if (swapped == false)
+            break;
+    }
+   
     return swaps;
 }
 
