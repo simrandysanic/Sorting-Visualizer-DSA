@@ -82,11 +82,12 @@ function animate(swaps) {
         colorSortedBars(); // Color sorted bars at the end
         return;
     }
+
     const [i, j] = swaps.shift(); // Get next pair of indices to swap
 
-    // Highlight the pivot if it's the current iteration
+    // Highlight the pivot separately
     if (i === j) {
-        showBars(i, -1, true); // Highlight pivot with i and no active swap
+        showBars(i, -1, true); // Highlight pivot
     } else {
         [array[i], array[j]] = [array[j], array[i]]; // Perform the swap
         swapCount++; // Increment swap counter
@@ -96,13 +97,14 @@ function animate(swaps) {
         playNote(200 + array[i] * 500);
         playNote(200 + array[j] * 500);
 
-        showBars(i, j); // Highlight swapped bars (red)
+        showBars(i, j); // Highlight swapped bars 
     }
 
     animationId = setTimeout(() => {
         animate(swaps);
     }, s); // Adjusted delay for better visibility
 }
+
 
 
 function quickSort(arr) {
@@ -146,47 +148,40 @@ function showBars(activeIndex1 = -1, activeIndex2 = -1, isPivot = false) {
 
     // Calculate maximum height for the bars
     const maxValue = Math.max(...array);
-
-    // Set a percentage height to leave space at the top
     const barMaxHeight = 90; // Use 90% of the container height for bars
 
     for (let i = 0; i < array.length; i++) {
         const bar = document.createElement("div");
 
-        bar.style.position = "absolute"; // Position bars absolutely
-        bar.style.bottom = "0"; // Start from the bottom of the container
-        bar.style.height = `${(array[i] / maxValue) * barMaxHeight}%`; // Set height relative to maxValue and barMaxHeight
-        bar.style.width = barWidth + "px"; // Set width of the bar
+        bar.style.position = "absolute";
+        bar.style.bottom = "0";
+        bar.style.height = `${(array[i] / maxValue) * barMaxHeight}%`;
+        bar.style.width = barWidth + "px";
         bar.classList.add("bar");
-        //bar.style.marginRight = "0px";
 
-        // Color bars differently based on their status
+        // Update color based on the status of each bar
         if (isPivot && i === activeIndex1) {
-            bar.style.backgroundColor = "#00BFFF"; // Pivot bar
+            bar.style.backgroundColor = "#00BFFF"; // Pivot color
         } else if (activeIndex1 !== -1 && (i === activeIndex1 || i === activeIndex2)) {
             bar.style.backgroundColor = "#FFEEAD"; // Swapped bars
         } else {
-            bar.style.backgroundColor = "#5d5d77"; // Unsorted bars
+            bar.style.backgroundColor = "#5d5d77"; // Default unsorted bar color
         }
 
-        // Set the left position based on index
-        bar.style.left = `${i * (barWidth + 1)}px`; // Adding 1px for spacing
+        bar.style.left = `${i * (barWidth + 1)}px`;
 
-        // Create a span for the number above the bar
         const numberSpan = document.createElement("span");
-        numberSpan.innerText = Math.floor(array[i] * 100); // Show the number corresponding to the bar height
-        numberSpan.style.fontSize = "12px"; // Adjust the font size for readability
-        numberSpan.style.position = "absolute"; // Position the number absolutely
-        numberSpan.style.left = `${i * (barWidth + 1) + barWidth / 2 - 8}px`; // Match the bar's left position
+        numberSpan.innerText = Math.floor(array[i] * 100);
+        numberSpan.style.fontSize = "12px";
+        numberSpan.style.position = "absolute";
+        numberSpan.style.left = `${i * (barWidth + 1) + barWidth / 2 - 8}px`;
+        numberSpan.style.bottom = `${(array[i] / maxValue) * barMaxHeight + 2}%`;
 
-        // Position the number slightly above the bar, with a little space
-        numberSpan.style.bottom = `${(array[i] / maxValue) * barMaxHeight + 2}%`; // Add 2% to position the number above the bar
-
-        // Append the number span to the container
         container.appendChild(numberSpan);
-        container.appendChild(bar); // This appends the bar to the container    
+        container.appendChild(bar);
     }
 }
+
 
 
 function colorSortedBars() {
